@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -x
+
+source openrc admin admin
+
+#sudo ovs-vsctl del-br br-mpls
+#sudo ovs-vsctl add-br br-mpls
+
+TENANT_ID=$(openstack project list | grep " demo " | get_field 1)
+NET_ID=$(neutron net-create --tenant-id $TENANT_ID "$PRIVATE_NETWORK_NAME" | grep ' id ' | get_field 2)
+neutron subnet-create --tenant-id $TENANT_ID --gateway $NETWORK_GATEWAY $NET_ID $FIXED_RANGE
+
+#NET_ID=$(neutron net-list | grep 'private' | get_field 1)
+
+neutron bgpvpn-connection-create --route-targets 64512:1
+BGP_CONN_ID=$(neutron bgpvpn-connection-create --route-targets 64512:1 | grep -m 1 'id' | get_field 2)
+neutron bgpvpn-connection-update $BGP_CONN_ID --network-id $NET_ID
+
+neutron-debug --config-file /etc/neutron/l3_agent.ini probe-create $NET_ID
+PROBE_NETNS=$(ip netns show | grep probe)
+
+sudo ip netns exec $PROBE_NETNS ip r add default via $NETWORK_GATEWAY
+
