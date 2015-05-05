@@ -23,9 +23,9 @@ https://github.com/Orange-OpenSource/bagpipe-bgp
 create a br-mpls bridge
 modify the following default parameters in bgp.conf :
 
-local_address=YOUR_IP
-dataplane_driver=mpls_ovs_dataplane.MPLSOVSDataplaneDriver
-ovs_bridge=br-mpls
+| local_address=YOUR_IP
+| dataplane_driver=mpls_ovs_dataplane.MPLSOVSDataplaneDriver
+| ovs_bridge=br-mpls
 
 
 Launching devstack on the first node
@@ -33,8 +33,8 @@ Launching devstack on the first node
 
 Modify local.conf and local.sh :
 
-ln -s local.conf.bgpvpn.neutron-only local.conf
-ln -s local.sh.bgpvpn local.sh
+| ln -s local.conf.bgpvpn.neutron-only local.conf
+| ln -s local.sh.bgpvpn local.sh
 
 launch devstack with a subnet to create :
 
@@ -50,8 +50,8 @@ peers=FIRST_NODE_IP
 
 Modify local.conf and local.sh :
 
-ln -s local.conf.bgpvpn.neutron-only local.conf
-ln -s local.sh.bgpvpn local.sh
+| ln -s local.conf.bgpvpn.neutron-only local.conf
+| ln -s local.sh.bgpvpn local.sh
 
 launch devstack with another subnet :
 
