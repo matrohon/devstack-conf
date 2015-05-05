@@ -36,6 +36,7 @@ Modify local.conf and local.sh :
 | ln -s local.conf.bgpvpn.neutron-only local.conf
 | ln -s local.sh.bgpvpn local.sh
 
+
 launch devstack with a subnet to create :
 
 FIXED_RANGE=10.0.0.0/24 NETWORK_GATEWAY=10.0.0.1 ./stack-bgpvpn.sh
@@ -52,6 +53,7 @@ Modify local.conf and local.sh :
 
 | ln -s local.conf.bgpvpn.neutron-only local.conf
 | ln -s local.sh.bgpvpn local.sh
+
 
 launch devstack with another subnet :
 
