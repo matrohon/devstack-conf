@@ -33,8 +33,8 @@ Launching devstack on the first node
 
 Modify local.conf and local.sh :
 
-| ln -s local.conf.bgpvpn.neutron-only local.conf
-| ln -s local.sh.bgpvpn local.sh
+| ln -s local.conf.bgpvpn.bagpipe local.conf
+| ln -s local.sh.bgpvpn.bagpipe local.sh
 
 
 launch devstack with a subnet to create :
@@ -51,8 +51,8 @@ peers=FIRST_NODE_IP
 
 Modify local.conf and local.sh :
 
-| ln -s local.conf.bgpvpn.neutron-only local.conf
-| ln -s local.sh.bgpvpn local.sh
+| ln -s local.conf.bgpvpn.bagpipe local.conf
+| ln -s local.sh.bgpvpn.bagpipe local.sh
 
 
 launch devstack with another subnet :
