@@ -28,6 +28,7 @@ disable_service n-xvnc
 disable_service n-cond
 disable_service n-crt
 disable_service n-api
+disable_service n-cauth
 
 #disable heat
 
@@ -62,7 +63,7 @@ Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,l2population
 
 ### BGPVPN Service Plugin ###
 Q_SERVICE_PLUGIN_CLASSES=networking_bgpvpn.neutron.services.plugin.BGPVPNPlugin
-enable_plugin networking-bgpvpn git@github.com:openstack/networking-bgpvpn.git
+enable_plugin networking-bgpvpn git://git.openstack.org/openstack/networking-bgpvpn.git
 
 [[post-config|/$NEUTRON_CONF]]
 

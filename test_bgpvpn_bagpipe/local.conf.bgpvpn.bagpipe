@@ -63,7 +63,7 @@ Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,l2population,bgpvpn_notify
 
 ### BGPVPN Service Plugin ###
 Q_SERVICE_PLUGIN_CLASSES=networking_bgpvpn.neutron.services.plugin.BGPVPNPlugin
-enable_plugin networking-bgpvpn git@github.com:openstack/networking-bgpvpn.git
+enable_plugin networking-bgpvpn git://git.openstack.org/openstack/networking-bgpvpn.git
 
 [[post-config|/$NEUTRON_CONF]]
 
