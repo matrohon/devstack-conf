@@ -1,0 +1,92 @@
+[[local|localrc]]
+ROOTSLEEP=0
+DATA_DIR=$TOP_DIR/data
+SCREEN_LOGDIR=/opt/stack/logs/screen
+VERBOSE=True
+LOGFILE=/opt/stack/logs/stack.sh.log
+
+enable_service rabbit
+
+disable_service tempest
+disable_service cinder
+disable_service horizon
+
+#disable cinder
+
+disable_service c-api
+disable_service c-vol
+disable_service c-sch
+
+#disable nova
+
+disable_service n-sch
+disable_service n-novnc
+disable_service n-cpu
+disable_service n-obj
+disable_service n-net
+disable_service n-xvnc
+disable_service n-cond
+disable_service n-crt
+disable_service n-api
+
+#disable heat
+
+disable_service h-eng
+disable_service h-api
+disable_service h-api-cfn
+disable_service h-api-cw
+
+#disable glance
+
+disable_service glance
+disable_service g-reg
+disable_service g-api
+
+#enable neutron
+
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+enable_service q-l3
+enable_service q-meta
+enable_service neutron
+
+NEUTRON_CREATE_INITIAL_NETWORKS=False
+
+### NEUTRON ###
+### ML2 plugin ###
+Q_PLUGIN=ml2
+Q_AGENT=bagpipe-openvswitch
+Q_ML2_PLUGIN_TYPE_DRIVERS=flat,vlan,vxlan
+Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,l2population
+
+
+### BGPVPN Service Plugin ###
+enable_plugin networking-bagpipe-l2 git://git.openstack.org/stackforge/networking-bagpipe-l2.git
+enable_plugin networking-bgpvpn git://git.openstack.org/openstack/networking-bgpvpn.git
+enable_plugin bagpipe-bgp https://github.com/Orange-OpenSource/bagpipe-bgp.git
+
+BAGPIPE_DATAPLANE_DRIVER_IPVPN=mpls_ovs_dataplane.MPLSOVSDataplaneDriver
+
+enable_service b-bgp
+enable_service b-fakerr
+
+[[post-config|$NETWORKING_BGPVPN_CONF]]
+
+[service_providers]
+service_provider=BGPVPN:BaGPipe:networking_bgpvpn.neutron.services.service_drivers.bagpipe.bagpipe.BaGPipeBGPVPNDriver:default
+
+[[post-config|/$Q_PLUGIN_CONF_FILE]]
+[ml2]
+tenant_network_types=vxlan
+
+[agent]
+l2_population=True
+tunnel_types=vxlan
+arp_responder=True
+
+[openvswitch]
+tunnel_types=vxlan
+
+[ml2_type_vxlan]
+vni_ranges = 1001:2000

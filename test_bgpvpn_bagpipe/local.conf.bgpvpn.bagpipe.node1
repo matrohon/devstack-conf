@@ -58,14 +58,21 @@ NEUTRON_CREATE_INITIAL_NETWORKS=False
 Q_PLUGIN=ml2
 Q_AGENT=bagpipe-openvswitch
 Q_ML2_PLUGIN_TYPE_DRIVERS=flat,vlan,vxlan
-Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,l2population,bgpvpn_notify
+Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,l2population
 
 
 ### BGPVPN Service Plugin ###
-Q_SERVICE_PLUGIN_CLASSES=networking_bgpvpn.neutron.services.plugin.BGPVPNPlugin
+enable_plugin networking-bagpipe-l2 git://git.openstack.org/stackforge/networking-bagpipe-l2.git
 enable_plugin networking-bgpvpn git://git.openstack.org/openstack/networking-bgpvpn.git
+enable_plugin bagpipe-bgp https://github.com/Orange-OpenSource/bagpipe-bgp.git
 
-[[post-config|/$NEUTRON_CONF]]
+BAGPIPE_DATAPLANE_DRIVER_IPVPN=mpls_ovs_dataplane.MPLSOVSDataplaneDriver
+BAGPIPE_BGP_PEERS=$SERVICE_HOST
+
+enable_service b-bgp
+enable_service b-fakerr
+
+[[post-config|$NETWORKING_BGPVPN_CONF]]
 
 [service_providers]
 service_provider=BGPVPN:BaGPipe:networking_bgpvpn.neutron.services.service_drivers.bagpipe.bagpipe.BaGPipeBGPVPNDriver:default
