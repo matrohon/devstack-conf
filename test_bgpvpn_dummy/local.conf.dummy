@@ -64,11 +64,6 @@ Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,l2population
 ### BGPVPN Service Plugin ###
 enable_plugin networking-bgpvpn git://git.openstack.org/openstack/networking-bgpvpn.git
 
-[[post-config|$NETWORKING_BGPVPN_CONF]]
-
-[service_providers]
-service_provider=BGPVPN:BaGPipe:networking_bgpvpn.neutron.services.service_drivers.driver_api.BGPVPNDriver:default
-
 [[post-config|/$Q_PLUGIN_CONF_FILE]]
 [ml2]
 tenant_network_types=vxlan

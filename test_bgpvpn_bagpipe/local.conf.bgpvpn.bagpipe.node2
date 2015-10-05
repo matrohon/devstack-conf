@@ -71,10 +71,7 @@ BAGPIPE_DATAPLANE_DRIVER_IPVPN=mpls_ovs_dataplane.MPLSOVSDataplaneDriver
 enable_service b-bgp
 enable_service b-fakerr
 
-[[post-config|$NETWORKING_BGPVPN_CONF]]
-
-[service_providers]
-service_provider=BGPVPN:BaGPipe:networking_bgpvpn.neutron.services.service_drivers.bagpipe.bagpipe.BaGPipeBGPVPNDriver:default
+NETWORKING_BGPVPN_DRIVER=$NETWORKING_BGPVPN_DRIVER_BAGPIPE
 
 [[post-config|/$Q_PLUGIN_CONF_FILE]]
 [ml2]
