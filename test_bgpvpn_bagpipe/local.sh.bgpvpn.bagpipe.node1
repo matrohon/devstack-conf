@@ -13,8 +13,8 @@ neutron subnet-create --tenant-id $TENANT_ID --gateway $NETWORK_GATEWAY $NET_ID 
 
 #NET_ID=$(neutron net-list | grep 'private' | get_field 1)
 
-BGP_CONN_ID=$(neutron bgpvpn-create --route-targets 64512:1 --tenant-id $TENANT_ID | grep -m 1 'id' | get_field 2)
-neutron bgpvpn-network-associate $BGP_CONN_ID --network-id $NET_ID
+BGPVPN_ID=$(neutron bgpvpn-create --route-targets 64512:1 --tenant-id $TENANT_ID | grep -m 1 'id' | get_field 2)
+neutron bgpvpn-net-assoc-create --network $NET_ID $BGPVPN_ID
 
 neutron-debug --config-file /etc/neutron/l3_agent.ini probe-create $NET_ID
 PROBE_NETNS=$(ip netns show | grep probe)

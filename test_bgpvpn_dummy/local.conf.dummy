@@ -54,6 +54,9 @@ enable_service neutron
 
 NEUTRON_CREATE_INITIAL_NETWORKS=False
 
+#need latest neutron-client that had the patch https://review.openstack.org/#/c/233571/
+LIBS_FROM_GIT=python-neutronclient
+
 ### NEUTRON ###
 ### ML2 plugin ###
 Q_PLUGIN=ml2
