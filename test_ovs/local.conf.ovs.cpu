@@ -1,0 +1,60 @@
+[[local|localrc]]
+HOST_IP=192.168.122.13
+#RECLONE=True
+#OFFLINE=True
+VERBOSE=True
+
+CONTROLLER_IP=192.168.122.12
+
+MULTI_HOST=1
+
+SERVICE_HOST=$CONTROLLER_IP
+MYSQL_HOST=$CONTROLLER_IP
+RABBIT_HOST=$CONTROLLER_IP
+GLANCE_HOSTPORT=$CONTROLLER_IP:9292
+
+ADMIN_PASSWORD=labo
+MYSQL_PASSWORD=labo
+RABBIT_PASSWORD=labo
+SERVICE_PASSWORD=labo
+SERVICE_TOKEN=token
+
+ENABLED_SERVICES=q-agt,n-cpu
+
+ROOTSLEEP=0
+DATA_DIR=$TOP_DIR/data
+FORCE_CONFIG_DRIVE=False
+
+Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,linuxbridge
+Q_ML2_TENANT_NETWORK_TYPE=vxlan
+
+NEUTRON_CREATE_INITIAL_NETWORKS=False
+
+[[post-config|/$Q_PLUGIN_CONF_FILE]]
+[ml2]
+tenant_network_types=vxlan
+
+[ml2_type_vxlan]
+vni_ranges = 1001:2000
+
+[ovs]
+local_ip=$HOST_IP
+
+[agent]
+tunnel_types=vxlan
+
+[vxlan]
+enable_vxlan=True
+local_ip=$HOST_IP
+
+[[post-config|$NOVA_CONF]]
+[DEFAULT]
+live_migration_retry_count = 1
+
+[libvirt]
+live_migration_bandwidth = 0
+live_migration_flag = VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_LIVE
+block_migration_flag = VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_LIVE, VIR_MIGRATE_NON_SHARED_INC, VIR_MIGRATE_TUNNELLED
+#block_migration_flag = VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_LIVE, VIR_MIGRATE_NON_SHARED_INC
+live_migration_uri = qemu+tcp://%s/system
+

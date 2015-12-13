@@ -1,0 +1,80 @@
+[[local|localrc]]
+HOST_IP=192.168.122.13
+RECLONE=True
+OFFLINE=False
+VERBOSE=True
+
+RABBIT_HOST=127.0.0.1
+
+ADMIN_PASSWORD=labo
+MYSQL_PASSWORD=labo
+RABBIT_PASSWORD=labo
+SERVICE_PASSWORD=labo
+SERVICE_TOKEN=token
+
+disable_service n-net
+disable_service n-obj
+#disable_service tempest
+
+enable_service n-novnc
+disable_service n-xvnc
+disable_service n-spice
+
+#disable_service n-cpu
+enable_service q-svc
+enable_service q-agt
+enable_service q-l3
+enable_service q-dhcp
+enable_service q-meta
+enable_service neutron
+
+disable_service h-eng
+disable_service h-api
+disable_service h-api-cfn
+disable_service h-api-cw
+disable_service c-api
+disable_service c-sch
+disable_service c-vol
+
+ROOTSLEEP=0
+DATA_DIR=$TOP_DIR/data
+SCREEN_LOGDIR=/opt/stack/log/controller
+LOGFILE=/opt/stack/logs/stack.sh.log
+
+#Q_AGENT=linuxbridge
+Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,linuxbridge,l2population
+Q_ML2_TENANT_NETWORK_TYPE=vxlan
+
+#enable DVR in single mode
+#Q_DVR_MODE=dvr_snat
+
+[[post-config|/$Q_PLUGIN_CONF_FILE]]
+[ml2]
+tenant_network_types=vxlan
+
+[ml2_type_vxlan]
+vni_ranges = 1001:2000
+
+[ovs]
+local_ip=$HOST_IP
+
+[agent]
+l2_population=True
+tunnel_types=vxlan
+
+[vxlan]
+enable_vxlan=True
+local_ip=$HOST_IP
+l2_population=True
+
+[[post-config|/$Q_DHCP_CONF_FILE]]
+[DEFAULT]
+enable_isolated_metadata=True
+dnsmasq_dns_server=8.8.8.8
+# so that dnsmasq still works even without an existing /etc/dnsmasq.conf:
+dnsmasq_config_file=/dev/null
+
+
+[[post-config|/$Q_L3_CONF_FILE]]
+[DEFAULT]
+external_network_bridge=br-ex
