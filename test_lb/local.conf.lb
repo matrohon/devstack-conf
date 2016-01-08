@@ -11,7 +11,10 @@ SERVICE_TOKEN=token
 
 
 # Do not use Nova-Network
-disable_service n-net
+disable_service c-api
+disable_service c-vol
+disable_service c-sch
+
 # Enable Neutron
 ENABLED_SERVICES+=,q-svc,q-dhcp,q-meta,q-agt,q-l3
 
