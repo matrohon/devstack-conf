@@ -15,6 +15,10 @@ disable_service c-api
 disable_service c-vol
 disable_service c-sch
 
+disable_service n-net
+
+FORCE_CONFIG_DRIVE=False
+
 # Enable Neutron
 ENABLED_SERVICES+=,q-svc,q-dhcp,q-meta,q-agt,q-l3
 
@@ -51,3 +55,15 @@ l2_population=True
 [[post-config|/$Q_L3_CONF_FILE]]
 [DEFAULT]
 external_network_bridge=
+
+[[post-config|$NOVA_CONF]]
+[DEFAULT]
+live_migration_retry_count = 1
+
+[libvirt]
+live_migration_bandwidth = 0
+live_migration_uri = qemu+tcp://%s/system
+#live_migration_flag = VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_LIVE
+#block_migration_flag = VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_LIVE, VIR_MIGRATE_NON_SHARED_INC, VIR_MIGRATE_TUNNELLED
+#block_migration_flag = VIR_MIGRATE_UNDEFINE_SOURCE, VIR_MIGRATE_PEER2PEER, VIR_MIGRATE_LIVE, VIR_MIGRATE_NON_SHARED_INC
+
