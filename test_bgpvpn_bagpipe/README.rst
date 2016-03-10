@@ -23,28 +23,28 @@ Launching devstack on the first node
 Modify local.conf and local.sh :
 
 | ln -s local.conf.bgpvpn.bagpipe.node1 local.conf
-| ln -s local.sh.bgpvpn.bagpipe.node1 local.sh
 
-launch devstack :
+launch devstack and create the bgpvpn : 
 
-./stack-bgpvpn.sh
+| ./stack-bgpvpn.sh
+| ./local.sh.bgpvpn.bagpipe.node1
 
 Launching devstack on the second node
 -------------------------------------
 
 The main differences between node1 and node2 are :
--subnet used for private networks taht we want to interconnect : no overlap
--The second node doesn't have to lauchn the Fake Route Reflector, but its
+-subnet used for private networks that we want to interconnect : no overlap
+-The second node doesn't have to launch the Fake Route Reflector, but its
 bagpipe has to peer with the one we instantiated on the first node
 
 Modify local.conf and local.sh :
 
 | ln -s local.conf.bgpvpn.bagpipe.node2 local.conf
-| ln -s local.sh.bgpvpn.bagpipe.node2 local.sh
 
 launch devstack with another subnet :
 
-BAGPIPE_BGP_PEERS="node1_ip" ./stack-bgpvpn.sh
+| BAGPIPE_BGP_PEERS="node1_ip" ./stack-bgpvpn.sh
+| ./local.sh.bgpvpn.bagpipe.node2
 
 Tests
 -----
