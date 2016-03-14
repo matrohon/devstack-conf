@@ -7,7 +7,9 @@ SCREEN_LOGDIR=/opt/stack/logs/screen
 VERBOSE=True
 LOGFILE=/opt/stack/logs/stack.sh.log
 
-ENABLED_SERVICES=q-svc,q-agt,q-dhcp,q-l3,key,mysql,rabbit,tempest,heat,h-api,h-api-cfn,h-api-cw,h-eng,b-bgp,b-fakerr
+#ENABLED_SERVICES=b-bgp,b-fakerr
+ENABLED_SERVICES=q-svc,q-meta,q-agt,q-dhcp,q-l3,key,mysql,rabbit,tempest,heat,h-api,h-api-cfn,h-api-cw,h-eng,b-bgp,b-fakerr
+ENABLED_SERVICES+=,g-api,g-reg,n-api,n-crt,n-cpu,n-cond,n-sch,n-obj
 
 ### NEUTRON ###
 ### ML2 core plugin ###
@@ -15,7 +17,7 @@ NEUTRON_CREATE_INITIAL_NETWORKS=False
 
 Q_PLUGIN=ml2
 Q_ML2_PLUGIN_TYPE_DRIVERS=vxlan
-Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
+Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,l2population
 
 ### BGPVPN Service Plugin ###
 enable_plugin networking-bgpvpn git://git.openstack.org/openstack/networking-bgpvpn.git
@@ -25,7 +27,8 @@ enable_plugin networking-bagpipe git://git.openstack.org/openstack/networking-ba
 
 ### Configure bagpipe ###
 BAGPIPE_DATAPLANE_DRIVER_IPVPN=mpls_ovs_dataplane.MPLSOVSDataplaneDriver
-BAGPIPE_BGP_PEERS=$SERVICE_HOST
+#Add peer explicitly untill the acceptance of https://github.com/Orange-OpenSource/bagpipe-bgp/pull/5
+BAGPIPE_BGP_PEERS=192.168.122.17
 
 ### Set bagpipe as the bgpvpn driver ###
 NETWORKING_BGPVPN_DRIVER=$NETWORKING_BGPVPN_DRIVER_BAGPIPE
@@ -40,4 +43,8 @@ tunnel_types=vxlan
 
 [ml2_type_vxlan]
 vni_ranges = 1001:2000
+
+[agent]
+l2_population=True
+arp_responder=True
 
