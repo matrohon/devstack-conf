@@ -13,7 +13,7 @@ resources:
   BGPVPN2:
     type: OS::Neutron::BGPVPN
     properties:
-        import_targets: [ "100:1001"]
+        route_targets: [ "100:1001"]
         name: "default VPN"
 
   Net2:
