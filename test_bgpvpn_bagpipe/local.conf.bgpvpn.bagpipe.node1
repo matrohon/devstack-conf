@@ -4,11 +4,19 @@
 ROOTSLEEP=0
 DATA_DIR=$TOP_DIR/data
 SCREEN_LOGDIR=/opt/stack/logs/screen
-VERBOSE=True
+#VERBOSE=True
 LOGFILE=/opt/stack/logs/stack.sh.log
 
+
+ADMIN_PASSWORD=labo
+MYSQL_PASSWORD=labo
+RABBIT_PASSWORD=labo
+SERVICE_PASSWORD=labo
+SERVICE_TOKEN=token
+
+
 #ENABLED_SERVICES=b-bgp,b-fakerr
-ENABLED_SERVICES=q-svc,q-meta,q-agt,q-dhcp,q-l3,key,mysql,rabbit,tempest,heat,h-api,h-api-cfn,h-api-cw,h-eng,b-bgp,b-fakerr
+ENABLED_SERVICES=q-svc,q-meta,q-agt,q-dhcp,q-l3,key,mysql,rabbit,heat,h-api,h-api-cfn,h-api-cw,h-eng,b-bgp,b-fakerr
 ENABLED_SERVICES+=,g-api,g-reg,n-api,n-crt,n-cpu,n-cond,n-sch,n-obj
 
 ### NEUTRON ###
@@ -28,10 +36,10 @@ enable_plugin networking-bagpipe git://git.openstack.org/openstack/networking-ba
 ### Configure bagpipe ###
 BAGPIPE_DATAPLANE_DRIVER_IPVPN=mpls_ovs_dataplane.MPLSOVSDataplaneDriver
 #Add peer explicitly untill the acceptance of https://github.com/Orange-OpenSource/bagpipe-bgp/pull/5
-BAGPIPE_BGP_PEERS=192.168.122.17
+BAGPIPE_BGP_PEERS=192.168.122.83
 
 ### Set bagpipe as the bgpvpn driver ###
-NETWORKING_BGPVPN_DRIVER=$NETWORKING_BGPVPN_DRIVER_BAGPIPE
+NETWORKING_BGPVPN_DRIVER=BGPVPN:BaGPipe:networking_bgpvpn.neutron.services.service_drivers.bagpipe.bagpipe.BaGPipeBGPVPNDriver:default
 
 ### ML2/ovs_agent config ###
 [[post-config|/$Q_PLUGIN_CONF_FILE]]
