@@ -4,10 +4,17 @@
 ROOTSLEEP=0
 DATA_DIR=$TOP_DIR/data
 SCREEN_LOGDIR=/opt/stack/logs/screen
-VERBOSE=True
+#VERBOSE=True
 LOGFILE=/opt/stack/logs/stack.sh.log
 
-ENABLED_SERVICES=q-svc,q-agt,q-dhcp,q-l3,key,mysql,rabbit,tempest,heat,h-api,h-api-cfn,h-api-cw,h-eng,b-bgp
+ADMIN_PASSWORD=labo
+MYSQL_PASSWORD=labo
+RABBIT_PASSWORD=labo
+SERVICE_PASSWORD=labo
+SERVICE_TOKEN=token
+
+ENABLED_SERVICES=q-svc,q-meta,q-agt,q-dhcp,q-l3,key,mysql,rabbit,heat,h-api,h-api-cfn,h-api-cw,h-eng,b-bgp
+ENABLED_SERVICES+=,g-api,g-reg,n-api,n-crt,n-cpu,n-cond,n-sch,n-obj
 
 ### NEUTRON ###
 ### ML2 core plugin ###
@@ -15,7 +22,7 @@ NEUTRON_CREATE_INITIAL_NETWORKS=False
 
 Q_PLUGIN=ml2
 Q_ML2_PLUGIN_TYPE_DRIVERS=vxlan
-Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
+Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch,l2population
 
 ### BGPVPN Service Plugin ###
 enable_plugin networking-bgpvpn git://git.openstack.org/openstack/networking-bgpvpn.git
@@ -27,7 +34,7 @@ enable_plugin networking-bagpipe git://git.openstack.org/openstack/networking-ba
 BAGPIPE_DATAPLANE_DRIVER_IPVPN=mpls_ovs_dataplane.MPLSOVSDataplaneDriver
 
 ### Set bagpipe as the bgpvpn driver ###
-NETWORKING_BGPVPN_DRIVER=$NETWORKING_BGPVPN_DRIVER_BAGPIPE
+NETWORKING_BGPVPN_DRIVER=BGPVPN:BaGPipe:networking_bgpvpn.neutron.services.service_drivers.bagpipe.bagpipe.BaGPipeBGPVPNDriver:default
 
 ### ML2/ovs_agent config ###
 [[post-config|/$Q_PLUGIN_CONF_FILE]]
@@ -39,4 +46,9 @@ tunnel_types=vxlan
 
 [ml2_type_vxlan]
 vni_ranges = 1001:2000
+
+[agent]
+l2_population=True
+arp_responder=True
+
 
