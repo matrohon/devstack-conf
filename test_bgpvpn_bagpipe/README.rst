@@ -17,38 +17,36 @@ Install OVS 2.4 or later (including the dkms module), by recompiling it :
 
 https://github.com/openvswitch/ovs
 
+You can also use the deb packages provided in the deb/ directory.
+
 Launching devstack on the first node
 ------------------------------------
 
-Modify local.conf and local.sh :
+Modify local.conf :
 
-| ln -s local.conf.bgpvpn.bagpipe.node1 local.conf
+| ln -s local.conf.bgpvpn.bagpipe local.conf
 
-launch devstack and create the bgpvpn : 
+Copy the stack-bgpvpn-bagpipe.sh script and the stack.yaml HOT template in your devstack directory and execute :
 
-| ./stack-bgpvpn.sh
-| ./local.sh.bgpvpn.bagpipe.node1
+| BAGPIPE_BGP_PEERS=__your-ip__ FAKERR=True CIDR=10.0.0.0/24 ./stack-bgpvpn-bagpipe.sh
+
+This will launch devstack with keystone, heat, neutron and bagpipe with its fake route reflector.
+It will also deploy a heat stack that creates the bgpvpn and the network attached to it.
+Finally, it creates a namespace with a port in this network.
 
 Launching devstack on the second node
 -------------------------------------
 
-The main differences between node1 and node2 are :
--subnet used for private networks that we want to interconnect : no overlap
--The second node doesn't have to launch the Fake Route Reflector, but its
-bagpipe has to peer with the one we instantiated on the first node
+Do the same as on first node except that you'll pass different env variables to stack-bgpvpn-bagpipe.sh : 
 
-Modify local.conf and local.sh :
+| BAGPIPE_BGP_PEERS=__first_node_ip__ CIDR=20.0.0.0/24 ./stack-bgpvpn-bagpipe.sh
 
-| ln -s local.conf.bgpvpn.bagpipe.node2 local.conf
-
-launch devstack with another subnet :
-
-| BAGPIPE_BGP_PEERS="node1_ip" ./stack-bgpvpn.sh
-| ./local.sh.bgpvpn.bagpipe.node2
 
 Tests
 -----
 
-Those scripts are going to create a probe namespace on each node.
+Probe namespaces have been created on each node.
 To validate your deployment, use the probe namespace deployed on the first node
 to ping the ip of the probe namespace created on the second node.
+
+| sudo ip netns exec __qprobe-portid__ ping 20.0.0.3

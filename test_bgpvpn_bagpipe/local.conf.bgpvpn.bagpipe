@@ -7,14 +7,17 @@ SCREEN_LOGDIR=/opt/stack/logs/screen
 #VERBOSE=True
 LOGFILE=/opt/stack/logs/stack.sh.log
 
+
 ADMIN_PASSWORD=labo
 MYSQL_PASSWORD=labo
 RABBIT_PASSWORD=labo
 SERVICE_PASSWORD=labo
 SERVICE_TOKEN=token
 
+
 ENABLED_SERVICES=q-svc,q-meta,q-agt,q-dhcp,q-l3,key,mysql,rabbit,heat,h-api,h-api-cfn,h-api-cw,h-eng,b-bgp
-ENABLED_SERVICES+=,g-api,g-reg,n-api,n-crt,n-cpu,n-cond,n-sch,n-obj
+if [ ! -z $FAKERR ]; then ENABLED_SERVICES+=,b-fakerr; fi
+#ENABLED_SERVICES+=,g-api,g-reg,n-api,n-crt,n-cpu,n-cond,n-sch,n-obj,horizon
 
 ### NEUTRON ###
 ### ML2 core plugin ###
@@ -50,5 +53,4 @@ vni_ranges = 1001:2000
 [agent]
 l2_population=True
 arp_responder=True
-
 

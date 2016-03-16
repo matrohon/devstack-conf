@@ -2,19 +2,17 @@ description: BGPVPN networking example (admin)
 heat_template_version: '2013-05-23'
 
 parameters:
-
-  key_name:
+  cidr:
     type: string
-    description : Name of a KeyPair to enable SSH access to the instance
-
+    description : cidr of the subnet attached to the bgpvpn
+    default : 10.0.0.0/24
 
 resources:
-
   BGPVPN2:
     type: OS::Neutron::BGPVPN
     properties:
-        route_targets: [ "100:1001"]
-        name: "default VPN"
+      route_targets: [ "100:1001"]
+      name: "default VPN"
 
   Net2:
     type: OS::Neutron::Net
@@ -22,20 +20,12 @@ resources:
   SubNet2:
     type: OS::Neutron::Subnet
     properties:
-       network: { get_resource: Net2 }
-       cidr: 192.168.10.0/24
+      network: { get_resource: Net2 }
+      cidr: { get_param: cidr }
 
   BGPVPN_NET_assoc2:
     type: OS::Neutron::BGPVPN-NET-ASSOCIATION
     properties:
-        bgpvpn_id: { get_resource: BGPVPN2 }
-        network_id: { get_resource: Net2 }
+      bgpvpn_id: { get_resource: BGPVPN2 }
+      network_id: { get_resource: Net2 }
 
-  my_instance:
-    type: OS::Nova::Server
-    properties:
-      key_name: { get_param: key_name }
-      networks:
-        - network: { get_resource: Net2 }
-      image: cirros-0.3.4-x86_64-uec
-      flavor: m1.tiny
